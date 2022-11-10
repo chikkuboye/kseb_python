@@ -93,29 +93,30 @@ while(True):
         dates = date.today()
         year = dates.year
         month = dates.month
-        #sql = ""
+        sql = "DELETE FROM `bill` WHERE `month`='"+str(month)+"' AND `year`='"+str(year)+"'"
+        print(sql)
+        mycursor.execute(sql)
+        mydb.commit()
         
-        sql = "SELECT `id` FROM `customer` WHERE `Cust_code`='"+cust_code+"'"
+        sql = "SELECT `id` FROM `customer` "
         mycursor.execute(sql)
         result = mycursor.fetchall()
-        dates = date.today()
-        year = dates.year
-        month = dates.month
-        # mon = 11
-        # yea = 2022
-        sql = "SELECT SUM(`Unit`) FROM `usage` WHERE `User_Id`='"+str(result[0])+"'  AND MONTH(`Date`)='"+str(month)+"' AND YEAR(`Date`)='"+str(year)+"'"
-        mycursor.execute(sql)
-        result = mycursor.fetchone()
-        unit = result[0]
-        print(unit)
-        total_bill = int(result[0]) * 5
-        print(total_bill)
-        status = 0
-    
-        sql = "INSERT INTO `bill`(`User_Id`, `month`, `year`, `bill`, `paid status`, `bill date`, `total_unit`) VALUES (%s,%s,%s,%s,%s,now(),%s)"
-        data = (str(result[0]),str(month),str(year),total_bill,status,str(unit))
-        mycursor.execute(sql , data)
-        mydb.commit()
+        for i in result:
+            print(i[0])
+            id = i[0]
+            sql = "SELECT SUM(`Unit`) FROM `usage` WHERE `User_Id`='"+str(i[0])+"'  AND MONTH(`Date`)='"+str(month)+"' AND YEAR(`Date`)='"+str(year)+"'"
+            mycursor.execute(sql)
+            result = mycursor.fetchone()
+            unit = result[0]
+            print(unit)
+            total_bill = int(result[0]) * 5
+            print(total_bill)
+            status = 0
+        
+            sql = "INSERT INTO `bill`(`User_Id`, `month`, `year`, `bill`, `paid status`, `bill date`,`due_date`, `total_unit`) VALUES (%s,%s,%s,%s,%s,now(),now()+interval 14 day,%s)"
+            data = (str(id),str(month),str(year),total_bill,status,str(unit))
+            mycursor.execute(sql , data)
+            mydb.commit()
     elif(choice==7):
         print("view the bill which had generated ")
     elif(choice==8):

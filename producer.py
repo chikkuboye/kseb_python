@@ -1,4 +1,4 @@
 from datetime import date
-todays = date.today()
-print(todays.year)
-print(todays.month)
+dates = date.now()
+print(dates)
+print(date.now()+[14 day])
