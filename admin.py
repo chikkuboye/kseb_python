@@ -62,6 +62,11 @@ while(True):
         print(tabulate(result,headers=['Name','Address','Phone_Number','Customer_Code','Email'],tablefmt = "psql"))
     elif(choice==3):
         print("You had entered into deleting customer choice ")
+        cust_code = input("Enter the customer id ")
+        sql = "DELETE FROM `customer` WHERE `Cust_code`='"+cust_code+"'"
+        mycursor.execute(sql)
+        mydb.commit()
+        print('Deleted successfully !!! ')
     elif(choice==4):
         print("You had entered into update customer choice ")
     elif(choice==5):
