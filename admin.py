@@ -81,6 +81,11 @@ while(True):
         print('Updated successfully !!! ')
     elif(choice==5):
         print("You had entered into view the details of all customer ")
+        sql = "SELECT `Name`, `Address`, `Phone_num`, `Cust_code`, `Email` FROM `customer`"
+        mycursor.execute(sql)
+        result = mycursor.fetchall()
+        print(tabulate(result,headers=['Name','Address','Phone_Number','Customer_Code','Email'],tablefmt = "psql"))
+
     elif(choice==6):
         print("You had entered into generate bill section ")
     elif(choice==7):
