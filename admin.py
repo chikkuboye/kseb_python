@@ -69,6 +69,16 @@ while(True):
         print('Deleted successfully !!! ')
     elif(choice==4):
         print("You had entered into update customer choice ")
+        cust_code = input('Enter the customer code to be updated ')
+        name = input("Enter the customer name ")
+        address = input("Enter the address of the customer ")
+        phone_number = input("Enter the phone number of the customer ")
+        #cust_code = input("Enter the customer code ")
+        email =  input("Enter the email id of the customer ")
+        sql = "UPDATE `customer` SET `Name`='"+name+"',`Address`='"+address+"',`Phone_num`='"+phone_number+"',`Email`='"+email+"' WHERE `Cust_code`='"+cust_code+"'"
+        mycursor.execute(sql)
+        mydb.commit()
+        print('Updated successfully !!! ')
     elif(choice==5):
         print("You had entered into view the details of all customer ")
     elif(choice==6):
