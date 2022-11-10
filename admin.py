@@ -95,7 +95,7 @@ while(True):
         year = dates.year
         month = dates.month
         sql = "DELETE FROM `bill` WHERE `month`='"+str(month)+"' AND `year`='"+str(year)+"'"
-        print(sql)
+        #print(sql)
         mycursor.execute(sql)
         mydb.commit()
         
@@ -103,15 +103,15 @@ while(True):
         mycursor.execute(sql)
         result = mycursor.fetchall()
         for i in result:
-            print(i[0])
+            #print(i[0])
             id = i[0]
             sql = "SELECT SUM(`Unit`) FROM `usage` WHERE `User_Id`='"+str(i[0])+"'  AND MONTH(`Date`)='"+str(month)+"' AND YEAR(`Date`)='"+str(year)+"'"
             mycursor.execute(sql)
             result = mycursor.fetchone()
             unit = result[0]
-            print(unit)
+            #print(unit)
             total_bill = int(result[0]) * 5
-            print(total_bill)
+            #print(total_bill)
             status = 0
             invoice = random.randint(10000,100000)
             sql = "INSERT INTO `bill`(`User_Id`, `month`, `year`, `bill`, `paid status`, `bill date`,`due_date`, `total_unit`,`invoice_num`) VALUES (%s,%s,%s,%s,%s,now(),now()+interval 14 day,%s,%s)"
