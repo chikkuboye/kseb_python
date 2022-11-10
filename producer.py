@@ -1,4 +1,3 @@
-from datetime import date
-dates = date.now()
-print(dates)
-print(date.now()+[14 day])
+import random
+a = random.randint(10000,100000)
+print(a)

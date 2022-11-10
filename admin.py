@@ -2,7 +2,7 @@ import mysql.connector
 from tabulate import tabulate
 import sys
 from datetime import date
-
+import random
 try:
     mydb = mysql.connector.connect(host = 'localhost' , user = 'root' , password = '' , database = 'kseb_db')
 except mysql.connector.Error as e:
@@ -20,7 +20,8 @@ while(True):
             5 .View all the customer details
             6 .Generate the bill
             7 .View the bill
-            8 .Exit
+            8 .Top 2 high bill
+            9 .Exit
     ''')
 
     choice = int(input("Enter your choice : "))
@@ -112,12 +113,23 @@ while(True):
             total_bill = int(result[0]) * 5
             print(total_bill)
             status = 0
-        
-            sql = "INSERT INTO `bill`(`User_Id`, `month`, `year`, `bill`, `paid status`, `bill date`,`due_date`, `total_unit`) VALUES (%s,%s,%s,%s,%s,now(),now()+interval 14 day,%s)"
-            data = (str(id),str(month),str(year),total_bill,status,str(unit))
+            invoice = random.randint(10000,100000)
+            sql = "INSERT INTO `bill`(`User_Id`, `month`, `year`, `bill`, `paid status`, `bill date`,`due_date`, `total_unit`,`invoice_num`) VALUES (%s,%s,%s,%s,%s,now(),now()+interval 14 day,%s,%s)"
+            data = (str(id),str(month),str(year),total_bill,status,str(unit),str(invoice))
             mycursor.execute(sql , data)
             mydb.commit()
     elif(choice==7):
         print("view the bill which had generated ")
+        sql = "SELECT  c.Name,c.Address,b.`month`, b.`year`, b.`bill`, b.`paid status`, b.`bill date`, b.`due_date`, b.`total_unit`, b.`invoice_num` FROM `bill` b JOIN customer c ON b.User_Id=c.id"
+        mycursor.execute(sql)
+        result = mycursor.fetchall()
+        print(tabulate(result,headers=['name','address','month','year','bill amount','status','bill date','due date','total unit','invoice_num'],tablefmt = "psql"))
+
     elif(choice==8):
+        print('Top 2 high bill')
+        sql = "SELECT c.Name,c.Address,b.`bill`, b.`total_unit` FROM `bill` b JOIN customer c ON b.User_Id=c.id ORDER BY b.`bill`DESC LIMIT 2"
+        mycursor.execute(sql)
+        result = mycursor.fetchall()
+        print(tabulate(result,headers=['name','Address','bill', 'total_unit']))
+    elif(choice==9):
         break
