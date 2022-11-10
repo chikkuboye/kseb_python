@@ -1,6 +1,7 @@
 import mysql.connector
 from tabulate import tabulate
 import sys
+from datetime import date
 
 try:
     mydb = mysql.connector.connect(host = 'localhost' , user = 'root' , password = '' , database = 'kseb_db')
@@ -88,6 +89,33 @@ while(True):
 
     elif(choice==6):
         print("You had entered into generate bill section ")
+        #cust_code = input('Enter the customer code : ')
+        dates = date.today()
+        year = dates.year
+        month = dates.month
+        #sql = ""
+        
+        sql = "SELECT `id` FROM `customer` WHERE `Cust_code`='"+cust_code+"'"
+        mycursor.execute(sql)
+        result = mycursor.fetchall()
+        dates = date.today()
+        year = dates.year
+        month = dates.month
+        # mon = 11
+        # yea = 2022
+        sql = "SELECT SUM(`Unit`) FROM `usage` WHERE `User_Id`='"+str(result[0])+"'  AND MONTH(`Date`)='"+str(month)+"' AND YEAR(`Date`)='"+str(year)+"'"
+        mycursor.execute(sql)
+        result = mycursor.fetchone()
+        unit = result[0]
+        print(unit)
+        total_bill = int(result[0]) * 5
+        print(total_bill)
+        status = 0
+    
+        sql = "INSERT INTO `bill`(`User_Id`, `month`, `year`, `bill`, `paid status`, `bill date`, `total_unit`) VALUES (%s,%s,%s,%s,%s,now(),%s)"
+        data = (str(result[0]),str(month),str(year),total_bill,status,str(unit))
+        mycursor.execute(sql , data)
+        mydb.commit()
     elif(choice==7):
         print("view the bill which had generated ")
     elif(choice==8):
